@@ -1,8 +1,15 @@
-import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
 import Notification from '../Notification';
+import './Statistics.scss';
+import { feedbackSelectors } from '../../redux/feedback';
 
-import './Statistics.css';
+const {
+  getGood,
+  getNeutral,
+  getBad,
+  getTotal,
+  getPositivePercentage,
+} = feedbackSelectors;
 
 const Statistics = ({ good, neutral, bad, total, positivePercentage }) => (
   <>
@@ -24,12 +31,12 @@ const Statistics = ({ good, neutral, bad, total, positivePercentage }) => (
   </>
 );
 
-Statistics.propTypes = {
-  good: PropTypes.number.isRequired,
-  neutral: PropTypes.number.isRequired,
-  bad: PropTypes.number.isRequired,
-  total: PropTypes.number.isRequired,
-  positivePercentage: PropTypes.number.isRequired,
-};
+const mapStateToProps = state => ({
+  good: getGood(state),
+  neutral: getNeutral(state),
+  bad: getBad(state),
+  total: getTotal(state),
+  positivePercentage: getPositivePercentage(state),
+});
 
-export default Statistics;
+export default connect(mapStateToProps)(Statistics);
