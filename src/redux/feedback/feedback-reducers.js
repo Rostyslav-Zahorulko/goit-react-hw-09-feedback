@@ -1,34 +1,20 @@
+import { createReducer } from '@reduxjs/toolkit';
 import { combineReducers } from 'redux';
-import feedbackTypes from './feedback-types';
+import { feedbackActions } from '../feedback';
 
-const { GOOD_INCREMENT, NEUTRAL_INCREMENT, BAD_INCREMENT } = feedbackTypes;
+const { goodIncrement, neutralIncrement, badIncrement } = feedbackActions;
 
-const goodReducer = (state = 0, { type, payload }) => {
-  switch (type) {
-    case GOOD_INCREMENT:
-      return state + payload;
-    default:
-      return state;
-  }
-};
+const goodReducer = createReducer(0, {
+  [goodIncrement]: (state, { payload }) => state + payload,
+});
 
-const neutralReducer = (state = 0, { type, payload }) => {
-  switch (type) {
-    case NEUTRAL_INCREMENT:
-      return state + payload;
-    default:
-      return state;
-  }
-};
+const neutralReducer = createReducer(0, {
+  [neutralIncrement]: (state, { payload }) => state + payload,
+});
 
-const badReducer = (state = 0, { type, payload }) => {
-  switch (type) {
-    case BAD_INCREMENT:
-      return state + payload;
-    default:
-      return state;
-  }
-};
+const badReducer = createReducer(0, {
+  [badIncrement]: (state, { payload }) => state + payload,
+});
 
 const optionsReducer = combineReducers({
   good: goodReducer,
@@ -36,7 +22,9 @@ const optionsReducer = combineReducers({
   bad: badReducer,
 });
 
-const stepReducer = (state = 1, _) => state;
+const stepReducer = createReducer(1, {
+  _: (state, _) => state,
+});
 
 const feedbackReducer = combineReducers({
   options: optionsReducer,

@@ -1,11 +1,11 @@
-import { createStore, combineReducers } from 'redux';
-import { composeWithDevTools } from 'redux-devtools-extension';
+import { configureStore } from '@reduxjs/toolkit';
 import feedbackReducer from './feedback/feedback-reducers';
 
-const rootReducer = combineReducers({
-  feedback: feedbackReducer,
+const store = configureStore({
+  reducer: {
+    feedback: feedbackReducer,
+  },
+  devTools: process.env.NODE_ENV === 'development',
 });
-
-const store = createStore(rootReducer, composeWithDevTools());
 
 export default store;

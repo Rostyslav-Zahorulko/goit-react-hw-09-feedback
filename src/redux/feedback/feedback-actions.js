@@ -1,21 +1,8 @@
-import feedbackTypes from './feedback-types';
+import { createAction } from '@reduxjs/toolkit';
 
-const { GOOD_INCREMENT, NEUTRAL_INCREMENT, BAD_INCREMENT } = feedbackTypes;
-
-const goodIncrement = value => ({
-  type: GOOD_INCREMENT,
-  payload: value,
-});
-
-const neutralIncrement = value => ({
-  type: NEUTRAL_INCREMENT,
-  payload: value,
-});
-
-const badIncrement = value => ({
-  type: BAD_INCREMENT,
-  payload: value,
-});
+const goodIncrement = createAction('feedback/goodIncrement');
+const neutralIncrement = createAction('feedback/neutralIncrement');
+const badIncrement = createAction('feedback/badIncrement');
 
 const feedbackActions = {
   goodIncrement,
