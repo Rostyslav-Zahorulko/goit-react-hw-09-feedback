@@ -1,5 +1,5 @@
 import './Notification.scss';
 
-const Notification = ({ message }) => <p className="message">{message}</p>;
+const Notification = ({ children }) => <p className="message">{children}</p>;
 
 export default Notification;

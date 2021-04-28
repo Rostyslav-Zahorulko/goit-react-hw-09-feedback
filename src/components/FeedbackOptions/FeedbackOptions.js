@@ -1,4 +1,5 @@
-import { connect } from 'react-redux';
+import { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import './FeedbackOptions.scss';
 import { feedbackSelectors } from '../../redux/feedback';
 import { feedbackActions } from '../../redux/feedback';
@@ -6,48 +7,50 @@ import { feedbackActions } from '../../redux/feedback';
 const { getOptions, getStep } = feedbackSelectors;
 const { goodIncrement, neutralIncrement, badIncrement } = feedbackActions;
 
-const FeedbackOptions = ({ options, step, onLeaveFeedback }) => (
-  <ul className="feedback-btn-list">
-    {options.map(option => {
-      const capitalizedOption = option[0].toUpperCase() + option.substring(1);
+const FeedbackOptions = () => {
+  const options = useSelector(getOptions);
+  const step = useSelector(getStep);
+  const dispatch = useDispatch();
 
-      return (
-        <li className="feedback-btn-list-item" key={option}>
-          <button
-            className="feedback-btn"
-            type="button"
-            id={option}
-            onClick={event => onLeaveFeedback(event, step)}
-          >
-            {capitalizedOption}
-          </button>
-        </li>
-      );
-    })}
-  </ul>
-);
+  const onLeaveFeedback = useCallback(
+    ({ target: { id } }, value) => {
+      switch (id) {
+        case 'good':
+          return dispatch(goodIncrement(value));
 
-const mapStateToProps = state => ({
-  options: getOptions(state),
-  step: getStep(state),
-});
+        case 'neutral':
+          return dispatch(neutralIncrement(value));
 
-const mapDispatchToProps = dispatch => ({
-  onLeaveFeedback: ({ target: { id } }, value) => {
-    switch (id) {
-      case 'good':
-        return dispatch(goodIncrement(value));
+        case 'bad':
+          return dispatch(badIncrement(value));
 
-      case 'neutral':
-        return dispatch(neutralIncrement(value));
+        default:
+          return;
+      }
+    },
+    [dispatch],
+  );
 
-      case 'bad':
-        return dispatch(badIncrement(value));
+  return (
+    <ul className="feedback-btn-list">
+      {options.map(option => {
+        const capitalizedOption = option[0].toUpperCase() + option.substring(1);
 
-      default:
-        return;
-    }
-  },
-});
+        return (
+          <li className="feedback-btn-list-item" key={option}>
+            <button
+              className="feedback-btn"
+              type="button"
+              id={option}
+              onClick={event => onLeaveFeedback(event, step)}
+            >
+              {capitalizedOption}
+            </button>
+          </li>
+        );
+      })}
+    </ul>
+  );
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(FeedbackOptions);
+export default FeedbackOptions;

@@ -1,4 +1,4 @@
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import Notification from '../Notification';
 import './Statistics.scss';
 import { feedbackSelectors } from '../../redux/feedback';
@@ -11,32 +11,32 @@ const {
   getPositivePercentage,
 } = feedbackSelectors;
 
-const Statistics = ({ good, neutral, bad, total, positivePercentage }) => (
-  <>
-    <h2 className="statistics-title">Statistics</h2>
+const Statistics = () => {
+  const good = useSelector(getGood);
+  const neutral = useSelector(getNeutral);
+  const bad = useSelector(getBad);
+  const total = useSelector(getTotal);
+  const positivePercentage = useSelector(getPositivePercentage);
 
-    {total === 0 ? (
-      <Notification message="No feedback given" />
-    ) : (
-      <>
-        <p className="statistics-item">Good: {good}</p>
-        <p className="statistics-item">Neutral: {neutral}</p>
-        <p className="statistics-item">Bad: {bad}</p>
-        <p className="statistics-item">Total: {total}</p>
-        <p className="statistics-item">
-          Positive feedback: {positivePercentage}%
-        </p>
-      </>
-    )}
-  </>
-);
+  return (
+    <>
+      <h2 className="statistics-title">Statistics</h2>
 
-const mapStateToProps = state => ({
-  good: getGood(state),
-  neutral: getNeutral(state),
-  bad: getBad(state),
-  total: getTotal(state),
-  positivePercentage: getPositivePercentage(state),
-});
+      {total === 0 ? (
+        <Notification>No feedback given</Notification>
+      ) : (
+        <>
+          <p className="statistics-item">Good: {good}</p>
+          <p className="statistics-item">Neutral: {neutral}</p>
+          <p className="statistics-item">Bad: {bad}</p>
+          <p className="statistics-item">Total: {total}</p>
+          <p className="statistics-item">
+            Positive feedback: {positivePercentage}%
+          </p>
+        </>
+      )}
+    </>
+  );
+};
 
-export default connect(mapStateToProps)(Statistics);
+export default Statistics;
